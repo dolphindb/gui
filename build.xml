@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="AntTestDemo" default="run" basedir=".">
+    <property name="src" value="src"/>
+    <property name="test" value="test"/>
+    <property name="classes_src" value="tmp\classes_src"/>
+    <property name="src_jar" value="tmp\dolphingui.jar"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="autocomplete_jar" value="${lib.dir}/autocomplete.jar"/>
+    <property name="jcommon_jar" value="${lib.dir}/jcommon-1.0.0.jar"/>
+    <property name="jfreechart_jar" value="${lib.dir}/jfreechart-1.0.19.jar"/>
+    <property name="jxl_jar" value="${lib.dir}/jxl-2.6.12.jar"/>
+    <property name="rsyntaxarea_jar" value="${lib.dir}/rsyntaxarea.jar"/>
+    <property name="dolphindb_jar" value="${lib.dir}/dolphindb.jar"/>
+    <path id="compile.path">
+        <!-- <pathelement location="${lib.dir}/junit-4.12.jar"/> -->
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <target name="init">
+        <mkdir dir="${classes_src}"/>
+    </target>
+
+    <target name="compilesrc" depends="init">
+        <javac srcdir="${src}" classpath="${autocomplete_jar};${jcommon_jar};${jfreechart_jar};${jxl_jar};${rsyntaxarea_jar};${dolphindb_jar}" destdir="${classes_src}" includeantruntime="false" />
+    </target>
+
+    <target name="buildsrc" depends="compilesrc">
+        <jar jarfile="${src_jar}" basedir="${classes_src}"/>
+    </target>
+
+    <target name="JUNIT">
+        <available property="junit.present" classname="junit.framework.TestCase" />
+    </target>
+
+    <target name="run" depends="buildsrc">
+        <junit printsummary="true" haltonfailure="no">
+            <classpath path="tmp;${autocomplete_jar};${jcommon_jar};${jfreechart_jar};${jxl_jar};${rsyntaxarea_jar};${dolphindb_jar};${src_jar}"></classpath>
+            <formatter type="plain"/>
+        </junit>
+    </target>
+</project>
